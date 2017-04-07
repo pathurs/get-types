@@ -50,3 +50,26 @@ function getDependencies() {
     });
 }
 exports.getDependencies = getDependencies;
+function sortObjectKeys(obj) {
+    return Object
+        .entries(obj)
+        .sort(function (_a, _b) {
+        var key1 = _a[0];
+        var key2 = _b[0];
+        if (key1 > key2) {
+            return 1;
+        }
+        else if (key1 < key2) {
+            return -1;
+        }
+        else {
+            return 0;
+        }
+    })
+        .reduce(function (agg, _a) {
+        var key = _a[0], value = _a[1];
+        return (__assign({}, agg, (_b = {}, _b[key] = value, _b)));
+        var _b;
+    }, {});
+}
+exports.sortObjectKeys = sortObjectKeys;
