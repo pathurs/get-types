@@ -1,11 +1,13 @@
 {
   "name": "get-types",
-  "version": "1.0.4",
+  "version": "1.0.5",
   "description": "",
   "main": "index.js",
   "bin": "./build/index.js",
   "scripts": {
-    "start": "tsc && node ./build/index.js"
+    "start": "npm run build && node ./build/index.js",
+    "build": "rm -rf build && tsc",
+    "prepublish": "npm run build && bash ./tasks/prepublish.sh"
   },
   "author": "",
   "license": "ISC",

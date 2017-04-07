@@ -1,0 +1,1 @@
+printf "#!/usr/bin/env node\n\n"|cat - ./build/index.js > /tmp/out && mv /tmp/out ./build/index.js
