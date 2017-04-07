@@ -7,5 +7,14 @@
     "bin": "tsc && node ./build/index.js"
   },
   "author": "",
-  "license": "ISC"
+  "license": "ISC",
+  "dependencies": {
+    "@types/node": "^7.0.12",
+    "@types/node-fetch": "1.6.7",
+    "express": "^4.15.2",
+    "node-fetch": "^1.6.3",
+    "request": "^2.81.0",
+    "@types/express": "4.0.35",
+    "@types/request": "0.0.42"
+  }
 }
