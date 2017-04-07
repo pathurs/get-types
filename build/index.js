@@ -49,7 +49,7 @@ var chalk_1 = require("chalk");
 main();
 function main() {
     return __awaiter(this, void 0, void 0, function () {
-        var dependencies, packageTypes, packageJson, newTypeDependencies, newPackageJson;
+        var dependencies, packageTypes, packageJson, oldDependencies, newTypeDependencies, newPackageJson;
         return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0:
@@ -58,11 +58,12 @@ function main() {
                 case 1:
                     packageTypes = _a.sent();
                     packageJson = require(util_1.packageJsonPath);
+                    oldDependencies = __assign({}, packageJson.dependencies, packageJson.devDependencies);
                     newTypeDependencies = packageTypes
                         .filter(function (_) {
                         // add only not present types
-                        var currenctDependencyNames = Object.keys(packageJson.dependencies);
-                        return !currenctDependencyNames.includes(_.dependencyTypes.name);
+                        var oldDependenciesNames = Object.keys(oldDependencies);
+                        return !oldDependenciesNames.includes(_.dependencyTypes.name);
                     })
                         .map(function (_a) {
                         var dependencyTypes = _a.dependencyTypes;
@@ -73,7 +74,7 @@ function main() {
                         return (__assign({}, agg, (_b = {}, _b[name] = version, _b)));
                         var _b;
                     }, {});
-                    newPackageJson = __assign({}, packageJson, { dependencies: sort(__assign({}, packageJson.dependencies, newTypeDependencies)) });
+                    newPackageJson = __assign({}, packageJson, { devDependencies: sort(__assign({}, packageJson.devDependencies, newTypeDependencies)) });
                     fs.writeFileSync(util_1.packageJsonPath, JSON.stringify(newPackageJson, null, 2));
                     console.log(chalk_1.green('package.json updated, run npm install'));
                     return [2 /*return*/];

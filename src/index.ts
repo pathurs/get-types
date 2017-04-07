@@ -13,12 +13,16 @@ async function main() {
   const packageTypes = await getPackagesTypesInfo(dependencies);
 
   const packageJson = require(packageJsonPath);
+  const oldDependencies = {
+    ...packageJson.dependencies,
+    ...packageJson.devDependencies
+  };
 
   const newTypeDependencies = packageTypes
     .filter(_ => {
       // add only not present types
-      const currenctDependencyNames = Object.keys(packageJson.dependencies);
-      return !currenctDependencyNames.includes(_.dependencyTypes.name);
+      const oldDependenciesNames = Object.keys(oldDependencies);
+      return !oldDependenciesNames.includes(_.dependencyTypes.name);
     })
     .map(({dependencyTypes}) => dependencyTypes)
     .reduce(
@@ -28,8 +32,8 @@ async function main() {
 
   const newPackageJson = {
     ...packageJson,
-    dependencies: sort({
-      ...packageJson.dependencies,
+    devDependencies: sort({
+      ...packageJson.devDependencies,
       ...newTypeDependencies
     })
   };
