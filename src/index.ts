@@ -1,10 +1,10 @@
 import * as path from 'path';
-import { getDependencies, packageJsonPath } from './findDependencies';
-import { getPackageTypes } from './checkForTypes';
-import { PackageInfo } from './model';
-import { getPackagesTypesInfo } from './getPackagesTypesInfo';
 import * as fs from 'fs';
-import {execSync} from 'child_process';
+import { execSync } from 'child_process';
+
+import { getDependencies, getPackagesTypesInfo, packageJsonPath } from './util';
+import { PackageInfo } from './model';
+import { blue, green } from 'chalk';
 
 main();
 
@@ -29,8 +29,7 @@ async function main() {
   };
 
   fs.writeFileSync(packageJsonPath, JSON.stringify(newPackageJson, null, 2));
-  execSync('npm install');
-  console.log('we should be done');
+  console.log(green('run npm install or yarn install'));
 }
 
 function sort(obj: object) {
