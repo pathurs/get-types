@@ -2,7 +2,7 @@ import * as path from 'path';
 import * as fs from 'fs';
 import { execSync } from 'child_process';
 
-import { getDependencies, getPackagesTypesInfo, packageJsonPath } from './util';
+import { getDependencies, getPackagesTypesInfo, packageJsonPath, sortObjectKeys } from './util';
 import { PackageInfo } from './model';
 import { blue, green } from 'chalk';
 
@@ -32,7 +32,7 @@ async function main() {
 
   const newPackageJson = {
     ...packageJson,
-    devDependencies: sort({
+    devDependencies: sortObjectKeys({
       ...packageJson.devDependencies,
       ...newTypeDependencies
     })
@@ -40,22 +40,4 @@ async function main() {
 
   fs.writeFileSync(packageJsonPath, JSON.stringify(newPackageJson, null, 2));
   console.log(green('package.json updated, run npm install'));
-}
-
-function sort(obj: object) {
-  return Object
-    .entries(obj)
-    .sort(([key1], [key2]) => {
-      if (key1 > key2) {
-        return 1;
-      } else if (key1 < key2) {
-        return -1;
-      } else {
-        return 0;
-      }
-    })
-    .reduce(
-      (agg, [key, value]) => ({...agg, [key]: value}),
-      {}
-    );
 }

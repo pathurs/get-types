@@ -41,3 +41,21 @@ export function getDependencies(): PackageInfo[] {
       return !name.includes('@types/');
     });
 }
+
+export function sortObjectKeys(obj: object) {
+  return Object
+    .entries(obj)
+    .sort(([key1], [key2]) => {
+      if (key1 > key2) {
+        return 1;
+      } else if (key1 < key2) {
+        return -1;
+      } else {
+        return 0;
+      }
+    })
+    .reduce(
+      (agg, [key, value]) => ({...agg, [key]: value}),
+      {}
+    );
+}
