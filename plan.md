@@ -4,3 +4,6 @@
 
 
 todo:
+- check if package json is present 
+- add only not present types
+- create update functionality
