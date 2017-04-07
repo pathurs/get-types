@@ -12,14 +12,20 @@ async function main() {
   const dependencies = getDependencies();
   const packageTypes = await getPackagesTypesInfo(dependencies);
 
+  const packageJson = require(packageJsonPath);
+
   const newTypeDependencies = packageTypes
+    .filter(_ => {
+      // add only not present types
+      const currenctDependencyNames = Object.keys(packageJson.dependencies);
+      return !currenctDependencyNames.includes(_.dependencyTypes.name);
+    })
     .map(({dependencyTypes}) => dependencyTypes)
     .reduce(
       (agg, {name, version}) => ({...agg, [name]: version}),
       {}
     );
 
-  const packageJson = require(packageJsonPath);
   const newPackageJson = {
     ...packageJson,
     dependencies: sort({
@@ -29,7 +35,7 @@ async function main() {
   };
 
   fs.writeFileSync(packageJsonPath, JSON.stringify(newPackageJson, null, 2));
-  console.log(green('run npm install or yarn install'));
+  console.log(green('package.json updated, run npm install'));
 }
 
 function sort(obj: object) {
