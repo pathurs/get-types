@@ -1,5 +1,7 @@
 import fetch from 'node-fetch';
 import * as path from 'path';
+import * as chalk from 'chalk';
+import * as fs from 'fs';
 import { TypesAwerePackageInfo, PackageInfo } from './model';
 
 // constants
@@ -18,6 +20,14 @@ export function getPackageTypes(packageName: string): Promise<PackageInfo> {
     .catch(_ => null);
 }
 
+export function isSetupValid(): [boolean, string] {
+  if (!fs.existsSync(packageJsonPath)) {
+    return [false, 'package.json is missing'];
+  } else {
+    return [true, null];
+  }
+}
+
 export function getPackagesTypesInfo(packages: PackageInfo[]): Promise<TypesAwerePackageInfo[]> {
   const getTypesForAll = packages.map((dependency) => {
     return getPackageTypes(dependency.name)
@@ -28,7 +38,7 @@ export function getPackagesTypesInfo(packages: PackageInfo[]): Promise<TypesAwer
   });
 
   return Promise.all(getTypesForAll)
-    .then(libsAndTypes => libsAndTypes.filter(_ => !!_.dependencyTypes));
+    .then(dependenciesAndTypes => dependenciesAndTypes.filter(_ => !!_.dependencyTypes));
 }
 
 export function getDependencies(): PackageInfo[] {

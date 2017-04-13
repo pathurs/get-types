@@ -51,22 +51,36 @@ var chalk_1 = require("chalk");
 main();
 function main() {
     return __awaiter(this, void 0, void 0, function () {
-        var dependencies, packageTypes, packageJson, oldDependencies, newTypeDependencies, newPackageJson;
-        return __generator(this, function (_a) {
-            switch (_a.label) {
+        var _a, isValid, message, dependencies, packageTypes, packageJson, oldDependencies, newTypeDependencies, newTypeDependenciesMap, newPackageJson;
+        return __generator(this, function (_b) {
+            switch (_b.label) {
                 case 0:
+                    _a = util_1.isSetupValid(), isValid = _a[0], message = _a[1];
+                    if (!isValid) {
+                        console.log(chalk_1.red(message));
+                        return [2 /*return*/];
+                    }
                     dependencies = util_1.getDependencies();
                     return [4 /*yield*/, util_1.getPackagesTypesInfo(dependencies)];
                 case 1:
-                    packageTypes = _a.sent();
+                    packageTypes = _b.sent();
                     packageJson = require(util_1.packageJsonPath);
                     oldDependencies = __assign({}, packageJson.dependencies, packageJson.devDependencies);
+                    if (Object.keys(oldDependencies).length === 0) {
+                        console.log(chalk_1.yellow('There are no dependencies in package.json'));
+                        return [2 /*return*/];
+                    }
                     newTypeDependencies = packageTypes
                         .filter(function (_) {
                         // add only not present types
                         var oldDependenciesNames = Object.keys(oldDependencies);
                         return !oldDependenciesNames.includes(_.dependencyTypes.name);
-                    })
+                    });
+                    if (newTypeDependencies.length === 0) {
+                        console.log(chalk_1.yellow('No new types was found to match dependencies'));
+                        return [2 /*return*/];
+                    }
+                    newTypeDependenciesMap = newTypeDependencies
                         .map(function (_a) {
                         var dependencyTypes = _a.dependencyTypes;
                         return dependencyTypes;
@@ -76,8 +90,14 @@ function main() {
                         return (__assign({}, agg, (_b = {}, _b[name] = version, _b)));
                         var _b;
                     }, {});
-                    newPackageJson = __assign({}, packageJson, { devDependencies: util_1.sortObjectKeys(__assign({}, packageJson.devDependencies, newTypeDependencies)) });
+                    newPackageJson = __assign({}, packageJson, { devDependencies: util_1.sortObjectKeys(__assign({}, packageJson.devDependencies, newTypeDependenciesMap)) });
                     fs.writeFileSync(util_1.packageJsonPath, JSON.stringify(newPackageJson, null, 2));
+                    console.log(chalk_1.green('Installed types:'));
+                    newTypeDependencies
+                        .forEach(function (dep) {
+                        var _a = dep.dependencyTypes, name = _a.name, version = _a.version;
+                        console.log(chalk_1.green("\t" + name + ":" + version));
+                    });
                     console.log(chalk_1.green('package.json updated, run npm install'));
                     return [2 /*return*/];
             }

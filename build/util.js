@@ -10,6 +10,7 @@ var __assign = (this && this.__assign) || Object.assign || function(t) {
 Object.defineProperty(exports, "__esModule", { value: true });
 var node_fetch_1 = require("node-fetch");
 var path = require("path");
+var fs = require("fs");
 // constants
 exports.packageJsonPath = path.resolve(process.cwd(), './package.json');
 // util functions
@@ -24,6 +25,15 @@ function getPackageTypes(packageName) {
         .catch(function (_) { return null; });
 }
 exports.getPackageTypes = getPackageTypes;
+function isSetupValid() {
+    if (!fs.existsSync(exports.packageJsonPath)) {
+        return [false, 'package.json is missing'];
+    }
+    else {
+        return [true, null];
+    }
+}
+exports.isSetupValid = isSetupValid;
 function getPackagesTypesInfo(packages) {
     var getTypesForAll = packages.map(function (dependency) {
         return getPackageTypes(dependency.name)
@@ -33,7 +43,7 @@ function getPackagesTypesInfo(packages) {
         }); });
     });
     return Promise.all(getTypesForAll)
-        .then(function (libsAndTypes) { return libsAndTypes.filter(function (_) { return !!_.dependencyTypes; }); });
+        .then(function (dependenciesAndTypes) { return dependenciesAndTypes.filter(function (_) { return !!_.dependencyTypes; }); });
 }
 exports.getPackagesTypesInfo = getPackagesTypesInfo;
 function getDependencies() {
