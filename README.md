@@ -46,5 +46,4 @@ $ get-types
 ```
 
 ### Todo
-- Check if package json is present, give information
-- Create update functionality
+- Update functionality

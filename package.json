@@ -1,7 +1,15 @@
 {
   "name": "get-types",
-  "version": "1.0.5",
-  "description": "",
+  "version": "1.0.6",
+  "description": "get available typescript type definitions for dependencies",
+  "keywords": [
+    "typescript",
+    "get",
+    "types",
+    "bulk",
+    "util",
+    "cli"
+  ],
   "main": "index.js",
   "bin": "./build/index.js",
   "scripts": {
@@ -9,8 +17,15 @@
     "build": "rm -rf build && tsc",
     "prepublish": "npm run build && bash ./tasks/prepublish.sh"
   },
-  "author": "",
-  "license": "ISC",
+  "author": "https://github.com/mariusalch",
+  "repository": {
+      "type": "git",
+      "url": "https://github.com/MariusAlch/get-types.git"
+  },
+  "bugs": {
+      "url": "https://github.com/MariusAlch/get-types/issues"
+  },
+  "license": "MIT",
   "devDependencies": {
     "@types/chalk": "0.4.31",
     "@types/node": "^7.0.12",
