@@ -43,7 +43,7 @@ export function getPackagesTypesInfo(packages: PackageInfo[]): Promise<TypesAwer
 
 export function getDependencies(): PackageInfo[] {
   const packageJson = require(packageJsonPath);
-  const dependencies = { ...packageJson.dependencies };
+  const dependencies = { ...packageJson.dependencies, ...packageJson.devDependencies };
 
   return Object.entries(dependencies)
     .map(([name, version]) => ({name, version}) )
